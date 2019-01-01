@@ -1,4 +1,4 @@
-# utility-host
+# utility-server
 
 Builds a Docker image that can be accessed via SSH and used as a personal jump/utility server.
 
