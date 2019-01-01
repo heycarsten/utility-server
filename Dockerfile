@@ -1,11 +1,8 @@
 ARG base_image_tag
-ARG login_user_arg="jmp"
-ARG login_home_arg="/home/jmp"
+ARG login_user="jmp"
+ARG login_home="/home/jmp"
 
 FROM $base_image_tag
-
-ENV login_home="$login_home_arg"
-ENV login_user="$login_user_arg"
 
 LABEL author="Carsten Nielsen <heycarsten@gmail.com>"
 LABEL description="An image for a jump/utility server with Ruby, Python, Node.js, and other various utilities"
@@ -15,11 +12,11 @@ USER $login_user
 # Copy credentials
 COPY config/.ssh/authorized_keys \
      config/.ssh/config \
-     $login_home_arg/.ssh/
+     $login_home/.ssh/
 
 COPY config/.aws/config \
      config/.aws/credentials \
-     $login_home_arg/.aws/
+     $login_home/.aws/
 
 USER root
 
