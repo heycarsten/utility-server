@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Load up .env
+set -o allexport
+[[ -f .env ]] && source .env
+set +o allexport
+
+if [ -z "$IMAGE_TAG" ] && [ -z "$CONTAINER_NAME" ]; then
+  # IMAGE_TAG and CONTAINER_NAME aren't in .env, expect them in args
+  IMAGE_TAG="$1"
+  CONTAINER_NAME="$2"
+  shift 2
+  COMMAND="$@"
+else
+  COMMAND="$@"
+fi
+
+if [ -z "$IMAGE_TAG" ] || [ -z "$CONTAINER_NAME" ] || [ -z "$COMMAND" ]; then
+  echo 'bin/exec - run a command (exec if already running, run --rm otherwise)'
+  echo 'usage: bin/exec [IMAGE_TAG CONTAINER_NAME] COMMAND'
+  echo
+else
+  if [ -z $(docker ps -q --filter name="$CONTAINER_NAME") ]; then
+    eval "docker run --rm -it --name ${CONTAINER_NAME} ${IMAGE_TAG}:latest ${COMMAND}"
+  else
+    eval "docker exec -it ${CONTAINER_NAME} ${COMMAND}"
+  fi
+fi

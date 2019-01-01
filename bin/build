@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -e
+
+# Load up .env
+set -o allexport
+[[ -f .env ]] && source .env
+set +o allexport
+
+if [ -z "$BASE_IMAGE_TAG" ]; then
+  BASE_IMAGE_TAG="$1"
+fi
+
+if [ -z "$IMAGE_TAG" ]; then
+  IMAGE_TAG="$2"
+fi
+
+if [ -z "$BASE_IMAGE_TAG" ] || [ -z "$IMAGE_TAG" ]; then
+  echo 'bin/build - builds docker images'
+  echo 'usage: bin/build [BASE_IMAGE_TAG IMAGE_TAG]'
+  echo
+else
+  docker build --squash -t "$BASE_IMAGE_TAG":latest -f Dockerfile.base .
+  docker build --squash -t "$IMAGE_TAG":latest --build-arg base_image_tag="$BASE_IMAGE_TAG":latest .
+fi

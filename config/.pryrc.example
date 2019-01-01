@@ -1,0 +1,4 @@
+Pry.config.color = true
+Pry.config.theme = 'solarized'
+Pry.editor = 'vim'
+Pry.commands.alias_command 'r!', 'reload!' rescue nil

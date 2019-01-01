@@ -1,0 +1,19 @@
+require 'rubygems'
+require 'yaml'
+
+def save_irb(filename)
+  File.open(filename, ?w) do |file|
+    file.puts(Readline::HISTORY.entries[0..-2])
+  end
+end
+
+def require_ext(name)
+  require name
+  yield if block_given?
+rescue LoadError
+  warn "unable to load: #{name}"
+end
+
+require_ext 'awesome_print' do
+  AwesomePrint.irb!
+end

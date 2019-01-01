@@ -1,0 +1,13 @@
+/config/.bashrc
+/config/.gemrc
+/config/.npmrc
+/config/.sudo-passwd
+/config/.irbrc
+/config/.pryrc
+/config/.ssh/authorized_keys
+/config/.ssh/config
+/config/.aws/config
+/config/.aws/credentials
+/config/sshd_config
+/.env
+/.ecr-auth

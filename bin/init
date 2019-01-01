@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+
+# Load up .env
+set -o allexport
+[[ -f .env ]] && source .env
+set +o allexport
+
+# $1 - path to file, relative to config/
+copy_example() {
+  cp -n "config/${1}.example" "config/${1}"
+  echo "-- config/${1}"
+}
+
+is_blank() {
+  if [ -z "$1" ]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+is_present() {
+  if is_blank "$1"; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+has_pristine_config() {
+  local example_file="config/${1}.example"
+  local config_file="config/${1}"
+  local config_digest=$(shasum -a 256 "$example_file" | awk '{print $1}')
+  local example_digest=$(shasum -a 256 "$config_file" | awk '{print $1}')
+
+  if [ "_$example_digest" = "_$config_digest" ]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+echo '== Setting up config files from example templates...'
+copy_example '.bashrc'
+copy_example '.gemrc'
+copy_example '.irbrc'
+copy_example '.npmrc'
+copy_example '.pryrc'
+copy_example '.sudo-passwd'
+copy_example 'sshd_config'
+copy_example '.ssh/authorized_keys'
+copy_example '.ssh/config'
+copy_example '.aws/config'
+copy_example '.aws/credentials'
+
+if [[ $(has_pristine_config ".ssh/authorized_keys") && $(is_present "$LOGIN_PUBKEY") ]]; then
+  echo -e "$LOGIN_PUBKEY" > config/.ssh/authorized_keys
+fi
+
+if [[ $(has_pristine_config ".aws/credentials") && $(is_present "$AWS_ACCESS_ID") && $(is_present "$AWS_SECRET_KEY") ]]; then
+  echo -e "[default]\naws_access_key_id=${AWS_ACCESS_ID}\naws_secret_access_key=${AWS_SECRET_KEY}\n" > config/.aws/credentials
+fi
+
+if [[ $(has_pristine_config ".sudo-passwd") && $(is_present "$SUDO_PASSWORD") ]]; then
+  echo -e "$SUDO_PASSWORD" > config/.sudo-passwd
+fi
+
+if [[ $(has_pristine_config ".sudo-passwd") || $(is_blank "$SUDO_PASSWORD") ]]; then
+  has_sudo_password=" "
+else
+  has_sudo_password="x"
+fi
+
+if [[ $(has_pristine_config ".ssh/authorized_keys") || $(is_blank "$LOGIN_PUBKEY") ]]; then
+  has_pubkey=" "
+else
+  has_pubkey="x"
+fi
+
+if [[ $(has_pristine_config ".aws/credentials") || $(is_blank "$AWS_SECRET_KEY") || $(is_blank "$AWS_ACCESS_ID") ]]; then
+  has_aws_creds=" "
+else
+  has_aws_creds="x"
+fi
+
+echo '-> Done'
+echo
+echo "Now it's a good idea to do the following:"
+echo
+echo " - [${has_sudo_password}] Add sudo password to config/.sudo-passwd"
+echo " - [${has_pubkey}] Add authorized public keys to config/.ssh/authorized_keys"
+echo " - [${has_aws_creds}] Add AWS credentials to config/.aws/credentials (optional)"
+echo " - [ ] Generally have a look at all the files in config/"
+echo
+echo "Then you're good to run bin/build!"
+echo

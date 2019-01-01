@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Load up .env
+set -o allexport
+[[ -f .env ]] && source .env
+set +o allexport
+
+if [ -z "$IMAGE_TAG" ]; then
+  IMAGE_TAG="$1"
+fi
+
+if [ -z "$AWS_ECR_REPO" ]; then
+  AWS_ECR_REPO="$2"
+fi
+
+if [ -z "$AWS_REGION" ]; then
+  AWS_REGION="$3"
+fi
+
+if [ -z "$IMAGE_TAG" ] || [ -z "$AWS_ECR_REPO" ] || [ -z "$AWS_REGION" ]; then
+  echo 'bin/push - builds, tags, and pushes image to Amazon ECR'
+  echo 'usage: bin/push [IMAGE_TAG AWS_ECR_REPO AWS_REGION]'
+  echo
+else
+  local latest_tag="${IMAGE_TAG}:latest"
+  local ecr_repo_uri="${AWS_ECR_REPO}:${latest_tag}"
+
+  bin/build "$IMAGE_TAG"
+  docker tag "$latest_tag" "$ecr_repo_uri"
+  bin/auth "$AWS_REGION"
+  docker push "$ecr_repo_uri"
+fi

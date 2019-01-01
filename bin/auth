@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Load up .env
+set -o allexport
+[[ -f .env ]] && source .env
+set +o allexport
+
+if [ -z "$AWS_REGION" ]; then
+  AWS_REGION="$1"
+fi
+
+if [ -z "$AWS_REGION" ]; then
+  echo 'bin/auth - authenticate with Amazon ECR via awscli'
+  echo 'usage: bin/auth [AWS_REGION]'
+  echo
+else
+  echo '== Fetching Amazon ECR auth token'
+  echo "$(aws ecr get-login --no-include-email --region ${AWS_REGION})" > ./.ecr-auth
+  echo '-> Done'
+fi
