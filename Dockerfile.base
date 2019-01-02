@@ -14,12 +14,11 @@ ARG python3_version="3.6.1"
 ARG python_global_version="3.6.1"
 ARG local_timezone="Etc/UTC"
 
-ENV \
-  HOME="/home/jmp" \
-  PYENV_ROOT="$HOME/.pyenv" \
-  RBENV_ROOT="$HOME/.rbenv" \
-  NVM_DIR="$HOME/.nvm" \
-  PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/bin:$PATH"
+ENV HOME="/home/jmp"
+ENV PYENV_ROOT="$HOME/.pyenv"
+ENV RBENV_ROOT="$HOME/.rbenv"
+ENV NVM_DIR="$HOME/.nvm"
+ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/bin:$PATH"
 
 # Copy sudo password file
 COPY config/.sudo-passwd /tmp/
