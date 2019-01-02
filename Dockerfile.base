@@ -1,19 +1,18 @@
+ARG login_user="jmp"
+ARG login_home="/home/jmp"
+ARG ruby_version="2.5.3"
+ARG node_version="10.15.0"
+ARG nvm_version="0.33.11"
+ARG python2_version="2.7.13"
+ARG python3_version="3.6.1"
+ARG python_global_version="3.6.1"
+ARG local_timezone="Etc/UTC"
+
 FROM ubuntu:18.04
 
 LABEL \
   author="Carsten Nielsen <heycarsten@gmail.com>" \
   description="An Ubuntu 18.04 (bionic) base image for utility servers"
-
-ARG \
-  login_user="jmp" \
-  login_home="/home/jmp" \
-  ruby_version="2.5.3" \
-  node_version="10.15.0" \
-  nvm_version="0.33.11" \
-  python2_version="2.7.13" \
-  python3_version="3.6.1" \
-  python_global_version="3.6.1" \
-  local_timezone="Etc/UTC"
 
 ENV \
   HOME="/home/jmp" \

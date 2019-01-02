@@ -1,7 +1,6 @@
-ARG \
-  base_image_tag \
-  login_user="jmp" \
-  login_home="/home/jmp"
+ARG base_image_tag
+ARG login_user="jmp"
+ARG login_home="/home/jmp"
 
 FROM $base_image_tag
 
