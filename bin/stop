@@ -5,7 +5,7 @@ set -o allexport
 [[ -f .env ]] && source .env
 set +o allexport
 
-if [ -z "$CONTAINER_NAME" ]; then
+if [ -n "$1" ]; then
   CONTAINER_NAME="$1"
 fi
 

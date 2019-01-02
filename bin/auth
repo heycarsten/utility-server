@@ -5,7 +5,7 @@ set -o allexport
 [[ -f .env ]] && source .env
 set +o allexport
 
-if [ -z "$AWS_REGION" ]; then
+if [ -n "$1" ]; then
   AWS_REGION="$1"
 fi
 

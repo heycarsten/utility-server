@@ -5,21 +5,21 @@ set -o allexport
 [[ -f .env ]] && source .env
 set +o allexport
 
-if [ -z "$IMAGE_TAG" ]; then
+if [ -n "$1" ]; then
   IMAGE_TAG="$1"
 fi
 
-if [ -z "$CONTAINER_NAME" ]; then
+if [ -n "$2" ]; then
   CONTAINER_NAME="$2"
 fi
 
-if [ -z "$LOGIN_HOME_VOLUME" ]; then
+if [ -n "$3" ]; then
   LOGIN_HOME_VOLUME="$3"
 fi
 
 if [ -z "$IMAGE_TAG" ] || [ -z "$CONTAINER_NAME" ] || [ -z "$LOGIN_HOME_VOLUME" ]; then
   echo 'bin/start - runs the sshd container in the background'
-  echo 'usage: bin/start [IMAGE_TAG CONTAINER_NAME CONTAINER_VOLUME]'
+  echo 'usage: bin/start [IMAGE_TAG] [CONTAINER_NAME] [LOGIN_HOME_VOLUME]'
   echo
 else
   docker run --detach --publish-all -v "$LOGIN_HOME_VOLUME" --name "$CONTAINER_NAME" "${IMAGE_TAG}:latest"

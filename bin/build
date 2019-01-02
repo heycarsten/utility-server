@@ -6,11 +6,11 @@ set -o allexport
 [[ -f .env ]] && source .env
 set +o allexport
 
-if [ -z "$BASE_IMAGE_TAG" ]; then
+if [ -n "$1" ]; then
   BASE_IMAGE_TAG="$1"
 fi
 
-if [ -z "$IMAGE_TAG" ]; then
+if [ -n "$2" ]; then
   IMAGE_TAG="$2"
 fi
 

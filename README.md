@@ -1,10 +1,14 @@
 # utility-server
 
-Builds a Docker image that can be accessed via SSH and used as a personal jump/utility server.
+Builds a Docker image that can be accessed via SSH and used as a personal jump/utility server. A little personal host for stuff like port forwarding, running cron jobs, getting access to a development environment from your phone or tablet, etc.
+
+## Is this an abuse of Docker?
+
+Maybe? I'm pretty new to the Docker thing and I'm liking it :slightly_smiling_face: I understand the whole "single service per container" concept, and I think it works really well for web applications (app frontends, background tasks, etc). I also think that _sometimes_ it makes sense to put a whole bunch of crap in one container and let'r rip! :laughing:
 
 ## Usage
 
-Use of `IMAGE_TAG` and `CONTAINER_NAME` below should be substituted with a tag and name of your choice. My tag is `heycarsten/jmp:latest` and an example container name might be `utility_test`. These values can also be configured in a `.env` file placed in the project root. Have a look at the example.
+First, There's a bunch of helper commands in `bin`, they all accept arguments setting values in a `.env` file.
 
 ### 1. Initialize config files using:
 

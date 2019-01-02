@@ -8,7 +8,7 @@ set +o allexport
 # $1 - path to file, relative to config/
 copy_example() {
   cp -n "config/${1}.example" "config/${1}"
-  echo "-- config/${1}"
+  echo " - config/${1}"
 }
 
 is_blank() {
@@ -40,6 +40,15 @@ has_pristine_config() {
   fi
 }
 
+if [ ! -f .env ]; then
+  echo '*********************************************************'
+  echo '* ERROR:                                                *'
+  echo '* No .env file was found :(                             *'
+  echo '* Please cp .env.example .env and modify it accordingly *'
+  echo '*********************************************************'
+  exit 1
+fi
+
 echo '== Setting up config files from example templates...'
 copy_example '.bashrc'
 copy_example '.gemrc'
@@ -61,36 +70,39 @@ if [[ $(has_pristine_config ".aws/credentials") && $(is_present "$AWS_ACCESS_ID"
   echo -e "[default]\naws_access_key_id=${AWS_ACCESS_ID}\naws_secret_access_key=${AWS_SECRET_KEY}\n" > config/.aws/credentials
 fi
 
-if [[ $(has_pristine_config ".sudo-passwd") && $(is_present "$SUDO_PASSWORD") ]]; then
-  echo -e "$SUDO_PASSWORD" > config/.sudo-passwd
+if [[ $(has_pristine_config ".sudo-passwd") && $(is_present "$LOGIN_SUDO_PASSWORD") ]]; then
+  echo -e "$LOGIN_SUDO_PASSWORD" > config/.sudo-passwd
 fi
 
-if [[ $(has_pristine_config ".sudo-passwd") || $(is_blank "$SUDO_PASSWORD") ]]; then
-  has_sudo_password=" "
+if [[ $(has_pristine_config ".sudo-passwd") || $(is_blank "$LOGIN_SUDO_PASSWORD") ]]; then
+  has_sudo_password="❌"
 else
-  has_sudo_password="x"
+  has_sudo_password="✅"
 fi
 
 if [[ $(has_pristine_config ".ssh/authorized_keys") || $(is_blank "$LOGIN_PUBKEY") ]]; then
-  has_pubkey=" "
+  has_pubkey="❌"
 else
-  has_pubkey="x"
+  has_pubkey="✅"
 fi
 
 if [[ $(has_pristine_config ".aws/credentials") || $(is_blank "$AWS_SECRET_KEY") || $(is_blank "$AWS_ACCESS_ID") ]]; then
-  has_aws_creds=" "
+  has_aws_creds="❌"
 else
-  has_aws_creds="x"
+  has_aws_creds="✅"
 fi
 
-echo '-> Done'
 echo
-echo "Now it's a good idea to do the following:"
+echo "Done 🎉! Here is all the stuff that's happened:"
 echo
-echo " - [${has_sudo_password}] Add sudo password to config/.sudo-passwd"
-echo " - [${has_pubkey}] Add authorized public keys to config/.ssh/authorized_keys"
-echo " - [${has_aws_creds}] Add AWS credentials to config/.aws/credentials (optional)"
-echo " - [ ] Generally have a look at all the files in config/"
+echo "  ✅ Found .env file"
+echo "  ${has_sudo_password} Added login sudo password to config/.sudo-passwd"
+echo "  ${has_pubkey} Added authorized public keys to config/.ssh/authorized_keys"
+echo "  ${has_aws_creds} Added AWS credentials to config/.aws/credentials (optional)"
 echo
-echo "Then you're good to run bin/build!"
+echo "Have a look, any of the files generated above can be changed to suit your"
+echo "personal preferences 👍🏼 When you're ready go ahead and run:"
+echo
+echo "  bin/build"
+echo "    🤜🏼🤛🏾"
 echo
