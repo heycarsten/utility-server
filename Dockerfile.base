@@ -1,8 +1,7 @@
 FROM ubuntu:18.04
 
-LABEL \
-  author="Carsten Nielsen <heycarsten@gmail.com>" \
-  description="An Ubuntu 18.04 (bionic) base image for utility servers"
+LABEL author="Carsten Nielsen <heycarsten@gmail.com>"
+LABEL description="An Ubuntu 18.04 (bionic) base image for utility servers"
 
 ARG login_user="jmp"
 ARG login_home="/home/jmp"
