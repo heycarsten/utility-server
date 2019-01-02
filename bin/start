@@ -14,14 +14,14 @@ if [ -n "$2" ]; then
 fi
 
 if [ -n "$3" ]; then
-  LOGIN_HOME_VOLUME="$3"
+  LOGIN_VOLUME="$3"
 fi
 
-if [ -z "$IMAGE_TAG" ] || [ -z "$CONTAINER_NAME" ] || [ -z "$LOGIN_HOME_VOLUME" ]; then
+if [ -z "$IMAGE_TAG" ] || [ -z "$CONTAINER_NAME" ] || [ -z "$LOGIN_VOLUME" ]; then
   echo 'bin/start - runs the sshd container in the background'
-  echo 'usage: bin/start [IMAGE_TAG] [CONTAINER_NAME] [LOGIN_HOME_VOLUME]'
+  echo 'usage: bin/start [IMAGE_TAG] [CONTAINER_NAME] [LOGIN_VOLUME]'
   echo
 else
-  docker run --detach --publish-all -v "$LOGIN_HOME_VOLUME" --name "$CONTAINER_NAME" "${IMAGE_TAG}:latest"
+  docker run --detach --publish-all -v "$LOGIN_VOLUME" --name "$CONTAINER_NAME" "${IMAGE_TAG}:latest"
   docker port "$CONTAINER_NAME" 22
 fi

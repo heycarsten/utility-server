@@ -6,6 +6,7 @@ LABEL description="An image for a jump/utility server with Ruby, Python, Node.js
 
 ARG login_user="jmp"
 ARG login_home="/home/jmp"
+ARG login_volume="/home/jmp"
 
 USER $login_user
 
@@ -20,6 +21,8 @@ COPY \
   config/.aws/credentials \
   $login_home/.aws/
 
+COPY config/.bash_profile $login_home/
+
 USER root
 
 # Update permissions
@@ -29,7 +32,8 @@ RUN \
   chmod 644 $login_home/.ssh/config && \
   chmod 700 $login_home/.aws && \
   chmod 644 $login_home/.aws/config && \
-  chmod 644 $login_home/.aws/credentials
+  chmod 644 $login_home/.aws/credentials && \
+  chown -R "${login_user}:sudo" $login_home/
 
 USER $login_user
 
@@ -47,6 +51,9 @@ RUN \
     ansible \
     awscli
 
-USER    root
-EXPOSE  22
-CMD     ["/usr/sbin/sshd", "-D"]
+COPY       config/docker-entrypoint.sh /
+USER       root
+ENTRYPOINT ["sh", "/docker-entrypoint.sh"]
+EXPOSE     22
+VOLUME     $login_volume
+CMD        ["-e"]

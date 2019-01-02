@@ -11,36 +11,20 @@ copy_example() {
   echo " - config/${1}"
 }
 
-is_blank() {
-  if [ -z "$1" ]; then
-    return 1
-  else
-    return 0
-  fi
-}
-
-is_present() {
-  if is_blank "$1"; then
-    return 0
-  else
-    return 1
-  fi
-}
-
 has_pristine_config() {
   local example_file="config/${1}.example"
   local config_file="config/${1}"
   local config_digest=$(shasum -a 256 "$example_file" | awk '{print $1}')
   local example_digest=$(shasum -a 256 "$config_file" | awk '{print $1}')
 
-  if [ "_$example_digest" = "_$config_digest" ]; then
-    return 1
+  if [[ "_$example_digest" == "_$config_digest" ]]; then
+    echo true
   else
-    return 0
+    echo false
   fi
 }
 
-if [ ! -f .env ]; then
+if [[ ! -f .env ]]; then
   echo '*********************************************************'
   echo '* ERROR:                                                *'
   echo '* No .env file was found :(                             *'
@@ -51,53 +35,77 @@ fi
 
 echo '== Setting up config files from example templates...'
 copy_example '.bashrc'
+copy_example '.bash_profile'
 copy_example '.gemrc'
 copy_example '.irbrc'
 copy_example '.npmrc'
 copy_example '.pryrc'
 copy_example '.sudo-passwd'
+copy_example 'docker-entrypoint.sh'
 copy_example 'sshd_config'
 copy_example '.ssh/authorized_keys'
 copy_example '.ssh/config'
 copy_example '.aws/config'
 copy_example '.aws/credentials'
 
-if [[ $(has_pristine_config ".ssh/authorized_keys") && $(is_present "$LOGIN_PUBKEY") ]]; then
+if $(has_pristine_config ".bash_profile") && [[ -n $LOGIN_HOME ]]; then
+  eval "perl -pi -e 's|#REPLACE_WITH_EXPORT_HOME_ENV|export HOME=$LOGIN_HOME|' config/.bash_profile"
+fi
+
+if $(has_pristine_config ".ssh/authorized_keys") && [[ -n $LOGIN_PUBKEY ]]; then
   echo -e "$LOGIN_PUBKEY" > config/.ssh/authorized_keys
 fi
 
-if [[ $(has_pristine_config ".aws/credentials") && $(is_present "$AWS_ACCESS_ID") && $(is_present "$AWS_SECRET_KEY") ]]; then
+if $(has_pristine_config ".aws/credentials") && [[ -n $AWS_ACCESS_ID ]] && [[ -n $AWS_SECRET_KEY ]]; then
   echo -e "[default]\naws_access_key_id=${AWS_ACCESS_ID}\naws_secret_access_key=${AWS_SECRET_KEY}\n" > config/.aws/credentials
 fi
 
-if [[ $(has_pristine_config ".sudo-passwd") && $(is_present "$LOGIN_SUDO_PASSWORD") ]]; then
+if $(has_pristine_config "docker-entrypoint.sh") && [[ -n $LOGIN_USER ]] && [[ -n $LOGIN_HOME ]]; then
+  echo -e "#!/usr/bin/env bash\nset -e\n\n# Make sure ${LOGIN_USER} owns their home directory contents\nchown -R ${LOGIN_USER}:sudo ${LOGIN_HOME}\n\n# Fire up sshd\n/usr/sbin/sshd -D \"\$@\"" > config/docker-entrypoint.sh
+fi
+
+if $(has_pristine_config ".sudo-passwd") && [[ -n $LOGIN_SUDO_PASSWORD ]]; then
   echo -e "$LOGIN_SUDO_PASSWORD" > config/.sudo-passwd
 fi
 
-if [[ $(has_pristine_config ".sudo-passwd") || $(is_blank "$LOGIN_SUDO_PASSWORD") ]]; then
+if $(has_pristine_config ".bash_profile") || [[ -z $LOGIN_HOME ]]; then
+  has_bash_profile="❌"
+else
+  has_bash_profile="✅"
+fi
+
+if $(has_pristine_config ".sudo-passwd") || [[ -z $LOGIN_SUDO_PASSWORD ]]; then
   has_sudo_password="❌"
 else
   has_sudo_password="✅"
 fi
 
-if [[ $(has_pristine_config ".ssh/authorized_keys") || $(is_blank "$LOGIN_PUBKEY") ]]; then
+if $(has_pristine_config ".ssh/authorized_keys") || [[ -z $LOGIN_PUBKEY ]]; then
   has_pubkey="❌"
 else
   has_pubkey="✅"
 fi
 
-if [[ $(has_pristine_config ".aws/credentials") || $(is_blank "$AWS_SECRET_KEY") || $(is_blank "$AWS_ACCESS_ID") ]]; then
+if $(has_pristine_config ".aws/credentials") || [[ -z $AWS_SECRET_KEY ]] || [[ -z $AWS_ACCESS_ID ]]; then
   has_aws_creds="❌"
 else
   has_aws_creds="✅"
+fi
+
+if $(has_pristine_config "docker-entrypoint.sh") || [[ -z $LOGIN_USER ]] || [[ -z $LOGIN_HOME ]]; then
+  has_entrypoint="❌"
+else
+  has_entrypoint="✅"
 fi
 
 echo
 echo "Done 🎉! Here is all the stuff that's happened:"
 echo
 echo "  ✅ Found .env file"
+echo "  ${has_bash_profile} Added HOME env var to config/.bash_profile"
 echo "  ${has_sudo_password} Added login sudo password to config/.sudo-passwd"
 echo "  ${has_pubkey} Added authorized public keys to config/.ssh/authorized_keys"
+echo "  ${has_entrypoint} Added entrypoint script to config/docker-entrypoint.sh"
 echo "  ${has_aws_creds} Added AWS credentials to config/.aws/credentials (optional)"
 echo
 echo "Have a look, any of the files generated above can be changed to suit your"

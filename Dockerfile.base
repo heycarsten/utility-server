@@ -63,18 +63,16 @@ RUN \
     cron \
     curl \
     htop \
+    build-essential \
     git-core \
     vim-nox \
     curl \
     sqlite3 \
     libsqlite3-dev \
-    gcc \
-    make \
     bzip2 \
     openssl \
     openssh-server \
     software-properties-common \
-    build-essential \
     libbz2-dev \
     libssl-dev \
     libreadline-dev \

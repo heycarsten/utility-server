@@ -10,6 +10,7 @@
 Protocol 2
 PermitRootLogin no
 StrictModes yes
+PermitUserEnvironment yes
 PubkeyAuthentication yes
 PasswordAuthentication no
 PermitEmptyPasswords no

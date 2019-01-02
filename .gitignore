@@ -1,9 +1,11 @@
 /config/.bashrc
+/config/.bash_profile
 /config/.gemrc
 /config/.npmrc
 /config/.sudo-passwd
 /config/.irbrc
 /config/.pryrc
+/config/.docker-entrypoint.sh
 /config/.ssh/authorized_keys
 /config/.ssh/config
 /config/.aws/config
