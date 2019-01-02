@@ -6,7 +6,7 @@ This project builds a Docker image that can be accessed via SSH and used as a pe
 
 Maybe? I'm pretty new to the Docker thing and I'm liking it :slightly_smiling_face: I understand the whole "single service per container" concept, and I think it works really well for web applications (app frontends, background tasks, etc). I also think that _sometimes_ it makes sense to put a whole bunch of crap in one container and let'r rip! :laughing:
 
-_I'm learning here! So if you see something weird [open an issue](https://github.com/heycarsten/utility-server/issues/new) and let me know :+1:
+_I'm learning here! So if you see something weird [open an issue](https://github.com/heycarsten/utility-server/issues/new) and let me know :+1:_
 
 ## Usage
 
