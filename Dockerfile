@@ -1,12 +1,12 @@
-ARG base_image_tag
-ARG login_user="jmp"
-ARG login_home="/home/jmp"
-
 FROM $base_image_tag
 
 LABEL \
   author="Carsten Nielsen <heycarsten@gmail.com>" \
   description="An image for a jump/utility server with Ruby, Python, Node.js, and other various utilities"
+
+ARG base_image_tag
+ARG login_user="jmp"
+ARG login_home="/home/jmp"
 
 USER $login_user
 

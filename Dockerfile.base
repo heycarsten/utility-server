@@ -1,3 +1,9 @@
+FROM ubuntu:18.04
+
+LABEL \
+  author="Carsten Nielsen <heycarsten@gmail.com>" \
+  description="An Ubuntu 18.04 (bionic) base image for utility servers"
+
 ARG login_user="jmp"
 ARG login_home="/home/jmp"
 ARG ruby_version="2.5.3"
@@ -7,12 +13,6 @@ ARG python2_version="2.7.13"
 ARG python3_version="3.6.1"
 ARG python_global_version="3.6.1"
 ARG local_timezone="Etc/UTC"
-
-FROM ubuntu:18.04
-
-LABEL \
-  author="Carsten Nielsen <heycarsten@gmail.com>" \
-  description="An Ubuntu 18.04 (bionic) base image for utility servers"
 
 ENV \
   HOME="/home/jmp" \
@@ -24,14 +24,15 @@ ENV \
 # Copy sudo password file
 COPY config/.sudo-passwd /tmp/
 
-# Create login user
 RUN \
+  # Create login user w/ sudo password
   useradd \
     --password $(cat /tmp/.sudo-passwd) \
     --shell /bin/bash \
     --create-home \
     --gid sudo \
     $login_user && \
+  # Delete password file
   rm /tmp/.sudo-passwd
 
 USER $login_user
