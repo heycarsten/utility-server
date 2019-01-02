@@ -21,8 +21,8 @@ if [ -z "$IMAGE_TAG" ] || [ -z "$CONTAINER_NAME" ] || [ -z "$COMMAND" ]; then
   echo
 else
   if [ -z $(docker ps -q --filter name="$CONTAINER_NAME") ]; then
-    eval "docker run --rm -it --name ${CONTAINER_NAME} ${IMAGE_TAG}:latest ${COMMAND}"
+    eval "docker run --rm --interactive --tty --volume "$LOGIN_HOME_VOLUME" --name ${CONTAINER_NAME} ${IMAGE_TAG}:latest ${COMMAND}"
   else
-    eval "docker exec -it ${CONTAINER_NAME} ${COMMAND}"
+    eval "docker exec --interactive --tty ${CONTAINER_NAME} ${COMMAND}"
   fi
 fi

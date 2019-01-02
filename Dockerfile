@@ -30,6 +30,8 @@ RUN chmod 700 $login_home/.ssh && \
 
 USER $login_user
 
+RUN ls -alh /home/jmp
+
 RUN \
   # Install Ruby packages (via RubyGems)
   gem install --force \
@@ -45,6 +47,5 @@ RUN \
     awscli
 
 USER    root
-VOLUME  $login_home
 EXPOSE  22
 CMD     ["/usr/sbin/sshd", "-D"]
