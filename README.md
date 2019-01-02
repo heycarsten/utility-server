@@ -38,15 +38,9 @@ bin/start
 ssh jmp@localhost -p PORT_RETURNED_BY_START_COMMAND
 ```
 
-_**TRAGIC NOTE:** This doesn't actually work yet :weary: Something is funny with sshd or public key auth config, looking into it._
+_**TRAGIC NOTE:** This doesn't actually work yet :weary: Something is funny with sshd or public key auth config, [looking into it](https://github.com/heycarsten/utility-server/issues/1)._
 
-![](https://snappities.s3.amazonaws.com/7cvy9gyp9yac8woknu2a.png)
-
-_With `-vv` added to `ssh` command:_
-
-![](https://snappities.s3.amazonaws.com/wdfy3twkah251686vj9t.png)
-
-Annnnyyyyyways. When you're done, shut it down:
+_Annnnyyyyyways…_ When you're done, shut it down:
 
 ```bash
 bin/stop
