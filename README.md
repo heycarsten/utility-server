@@ -10,7 +10,7 @@ _I'm learning here! So if you see something weird [open an issue](https://github
 
 ## Usage
 
-First, There's a bunch of helper commands in `bin`, they all accept arguments setting values in a `.env` file.
+First, `cp .env.example .env`, then have a look in `.env` and modify it as you wish.
 
 ### 1. Initialize config files:
 
@@ -30,25 +30,33 @@ This will build the base image and the final image from that one.
 
 ### 3. Give it a whirl:
 
+Fire up the container:
+
 ```bash
 bin/start
 ```
+
+SSH into the container:
 
 ```bash
 ssh jmp@localhost -p PORT_RETURNED_BY_START_COMMAND
 ```
 
-_**TRAGIC NOTE:** This doesn't actually work yet :weary: Something is funny with sshd or public key auth config, [looking into it](https://github.com/heycarsten/utility-server/issues/1)._
-
-_Annnnyyyyyways…_ When you're done, shut it down:
+When you're done, shut it down:
 
 ```bash
 bin/stop
 ```
 
+If you want to run a one-off command on the container:
+
+```bash
+bin/exec ls -alh /home/jmp
+```
+
 ### 4. Push the image to [Amazon ECR](https://aws.amazon.com/ecr/)
 
-WOW, I'm not even this far yet. The goal of this is command is to be able to push these images into ECR. Learn how that all works, and then ultimately use Amazon ECS to host this jazzy personal utility server.
+WIP: The goal of this is command is to be able to push these images into ECR. Learn how that all works, and then ultimately use Amazon ECS to host this jazzy personal utility server.
 
 ```bash
 bin/push
@@ -56,4 +64,4 @@ bin/push
 
 ### 5. Host it with [Amazon ECS](https://aws.amazon.com/ecs/)
 
-Soon :heart:
+WIP: Soon :heart:
