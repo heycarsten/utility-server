@@ -3,7 +3,11 @@ FROM ubuntu:18.04
 LABEL author="Carsten Nielsen <heycarsten@gmail.com>"
 LABEL description="An Ubuntu 18.04 (bionic) base image for utility servers"
 
+EXPOSE 22
+ENTRYPOINT ["sh", "/docker-entrypoint.sh"]
+
 ARG login_user="jmp"
+ARG login_group="sudo"
 ARG login_home="/home/jmp"
 ARG ruby_version="2.5.3"
 ARG node_version="10.15.0"
@@ -19,35 +23,13 @@ ENV RBENV_ROOT="$HOME/.rbenv"
 ENV NVM_DIR="$HOME/.nvm"
 ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/bin:$PATH"
 
-# Copy sudo password file
-COPY config/.sudo-passwd /tmp/
-
-RUN \
-  # Create login user w/ sudo password
-  useradd \
-    --password $(cat /tmp/.sudo-passwd) \
-    --shell /bin/bash \
-    --create-home \
-    --gid sudo \
-    $login_user && \
-  # Delete password file
-  rm /tmp/.sudo-passwd
-
-USER $login_user
-
 WORKDIR $login_home
 
-# Copy configs
-COPY \
-  config/.bashrc \
-  config/.gemrc \
-  config/.npmrc \
-  config/.irbrc \
-  config/.pryrc \
-  $login_home/
+# Copy entrypoint script
+COPY config/docker-entrypoint.sh /
 
-# Back to root for system stuff
-USER root
+# Copy sudo password file
+COPY config/.sudo-passwd /tmp/
 
 # Install system packages
 RUN \
@@ -59,14 +41,17 @@ RUN \
   dpkg-reconfigure -f noninteractive tzdata && \
   # Install packages
   apt-get install -yqq \
+    man \
+    bash \
     sudo \
     cron \
     curl \
     htop \
     build-essential \
-    git-core \
+    git \
     vim-nox \
     curl \
+    wget \
     sqlite3 \
     libsqlite3-dev \
     bzip2 \
@@ -79,21 +64,45 @@ RUN \
     libffi-dev \
     libsqlite3-dev \
     libpng-dev \
+    libvips-dev \
     libfreetype6-dev \
     tk-dev && \
-  # Cleanup
-  apt-get clean -yqq && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
   # Make pid dir for sshd
   mkdir -p /var/run/sshd && \
-  # Make sure $login_user:sudo owns their home directory and contents
+  # Make sudoers file
+  echo '%sudo	ALL=(ALL:ALL) ALL' >> /etc/sudoers && \
+  # Create login user w/ sudo password
+  useradd \
+    --password $(cat /tmp/.sudo-passwd) \
+    --shell /bin/bash \
+    --create-home \
+    --gid $login_group \
+    $login_user && \
+  # Delete password file
+  rm /tmp/.sudo-passwd && \
+  # Make sure $login_user:$login_group owns their home directory and contents
   mkdir -p $login_home/.cache && \
-  chown -R $login_user:sudo $login_home/
+  chown -R $login_user:$login_group $login_home/ && \
+  # Cleanup
+  apt-get clean -yqq && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set up sshd configuration
 COPY config/sshd_config /etc/ssh/sshd_config
 
-USER $login_user
+# Copy configs
+COPY \
+  # config/.bashrc \
+  config/.gemrc \
+  config/.npmrc \
+  config/.irbrc \
+  config/.pryrc \
+  $login_home/
+
+# Re-own home directory
+RUN chown -R $login_user:$login_group $login_home/
+
+USER $login_user:$login_group
 
 RUN \
   # Install Ruby (via rbenv)

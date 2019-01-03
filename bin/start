@@ -5,19 +5,19 @@ set -o allexport
 [[ -f .env ]] && source .env
 set +o allexport
 
-if [ -n "$1" ]; then
+if [[ -n $1 ]]; then
   IMAGE_TAG="$1"
 fi
 
-if [ -n "$2" ]; then
+if [[ -n $2 ]]; then
   CONTAINER_NAME="$2"
 fi
 
-if [ -n "$3" ]; then
+if [[ -n $3 ]]; then
   LOGIN_VOLUME="$3"
 fi
 
-if [ -z "$IMAGE_TAG" ] || [ -z "$CONTAINER_NAME" ] || [ -z "$LOGIN_VOLUME" ]; then
+if [[ -z $IMAGE_TAG ]] || [[ -z $CONTAINER_NAME ]] || [[ -z $LOGIN_VOLUME ]]; then
   echo 'bin/start - runs the sshd container in the background'
   echo 'usage: bin/start [IMAGE_TAG] [CONTAINER_NAME] [LOGIN_VOLUME]'
   echo

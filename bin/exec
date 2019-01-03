@@ -5,7 +5,7 @@ set -o allexport
 [[ -f .env ]] && source .env
 set +o allexport
 
-if [ -z "$IMAGE_TAG" ] || [ -z "$CONTAINER_NAME" ] || [ -z "$LOGIN_VOLUME" ]; then
+if [[ -z $IMAGE_TAG ]] || [[ -z $CONTAINER_NAME ]] || [[ -z $LOGIN_VOLUME ]]; then
   # IMAGE_TAG, CONTAINER_NAME, LOGIN_VOLUME not in .env assume in in args
   IMAGE_TAG="$1"
   CONTAINER_NAME="$2"
@@ -16,14 +16,14 @@ else
   COMMAND="$@"
 fi
 
-if [ -z "$IMAGE_TAG" ] || [ -z "$CONTAINER_NAME" ] || [ -z "$LOGIN_VOLUME" ] || [ -z "$COMMAND" ]; then
+if [[ -z $IMAGE_TAG ]] || [[ -z $CONTAINER_NAME ]] || [[ -z $LOGIN_VOLUME ]] || [[ -z $COMMAND ]]; then
   echo 'bin/exec - run a command (exec if already running, run --rm otherwise)'
   echo 'usage: bin/exec [IMAGE_TAG CONTAINER_NAME LOGIN_VOLUME] COMMAND'
   echo
 else
-  if [ -z $(docker ps -a --filter name="$CONTAINER_NAME") ]; then
-    eval "docker run --rm --interactive --tty --volume "$LOGIN_VOLUME" --name ${CONTAINER_NAME} ${IMAGE_TAG}:latest ${COMMAND}"
+  if [[ -z $(docker ps -a --filter name="$CONTAINER_NAME") ]]; then
+    eval "docker run --rm --interactive --tty --volume $LOGIN_VOLUME --name $CONTAINER_NAME ${IMAGE_TAG}:latest $COMMAND"
   else
-    eval "docker exec --interactive --tty ${CONTAINER_NAME} ${COMMAND}"
+    eval "docker exec --interactive --tty $CONTAINER_NAME $COMMAND"
   fi
 fi

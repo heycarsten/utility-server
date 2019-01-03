@@ -35,7 +35,7 @@ fi
 
 echo '== Setting up config files from example templates...'
 copy_example '.bashrc'
-copy_example '.bash_profile'
+copy_example '.profile'
 copy_example '.gemrc'
 copy_example '.irbrc'
 copy_example '.npmrc'
@@ -48,8 +48,8 @@ copy_example '.ssh/config'
 copy_example '.aws/config'
 copy_example '.aws/credentials'
 
-if $(has_pristine_config ".bash_profile") && [[ -n $LOGIN_HOME ]]; then
-  eval "perl -pi -e 's|#REPLACE_WITH_EXPORT_HOME_ENV|export HOME=$LOGIN_HOME|' config/.bash_profile"
+if $(has_pristine_config ".profile") && [[ -n $LOGIN_HOME ]]; then
+  eval "perl -pi -e 's|#REPLACE_WITH_EXPORT_HOME_ENV|export HOME=\"$LOGIN_HOME\"|' config/.profile"
 fi
 
 if $(has_pristine_config ".ssh/authorized_keys") && [[ -n $LOGIN_PUBKEY ]]; then
@@ -68,10 +68,10 @@ if $(has_pristine_config ".sudo-passwd") && [[ -n $LOGIN_SUDO_PASSWORD ]]; then
   echo -e "$LOGIN_SUDO_PASSWORD" > config/.sudo-passwd
 fi
 
-if $(has_pristine_config ".bash_profile") || [[ -z $LOGIN_HOME ]]; then
-  has_bash_profile="❌"
+if $(has_pristine_config ".profile") || [[ -z $LOGIN_HOME ]]; then
+  has_profile="❌"
 else
-  has_bash_profile="✅"
+  has_profile="✅"
 fi
 
 if $(has_pristine_config ".sudo-passwd") || [[ -z $LOGIN_SUDO_PASSWORD ]]; then
@@ -102,7 +102,7 @@ echo
 echo "Done 🎉! Here is all the stuff that's happened:"
 echo
 echo "  ✅ Found .env file"
-echo "  ${has_bash_profile} Added HOME env var to config/.bash_profile"
+echo "  ${has_profile} Added HOME env var to config/.profile"
 echo "  ${has_sudo_password} Added login sudo password to config/.sudo-passwd"
 echo "  ${has_pubkey} Added authorized public keys to config/.ssh/authorized_keys"
 echo "  ${has_entrypoint} Added entrypoint script to config/docker-entrypoint.sh"

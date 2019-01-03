@@ -1,22 +1,20 @@
-#	$OpenBSD: sshd_config,v 1.101 2017/03/14 07:19:07 djm Exp $
-# This is the sshd server system-wide configuration file.  See
-# sshd_config(5) for more information.
-# This sshd was compiled with PATH=/usr/bin:/bin:/usr/sbin:/sbin
-# The strategy used for options in the default sshd_config shipped with
-# OpenSSH is to specify options with their default value where
-# possible, but leave them commented. Uncommented options override the
-# default value.
-
+# Adapted from default Ubuntu config
 Protocol 2
+UsePrivilegeSeparation yes
 PermitRootLogin no
 StrictModes yes
 PermitUserEnvironment yes
-PubkeyAuthentication yes
 PasswordAuthentication no
 PermitEmptyPasswords no
 ChallengeResponseAuthentication no
-UsePAM no
+UsePAM yes
+RSAAuthentication yes
+PubkeyAuthentication yes
+IgnoreRhosts yes
 X11Forwarding yes
+X11DisplayOffset 10
 PrintMotd no
+PrintLastLog yes
+TCPKeepAlive yes
 AcceptEnv LANG LC_*
 Subsystem	sftp /usr/lib/openssh/sftp-server

@@ -5,19 +5,19 @@ set -o allexport
 [[ -f .env ]] && source .env
 set +o allexport
 
-if [ -n "$1" ]; then
+if [[ -n $1 ]]; then
   IMAGE_TAG="$1"
 fi
 
-if [ -n "$2" ]; then
+if [[ -n $2 ]]; then
   AWS_ECR_REPO="$2"
 fi
 
-if [ -n "$3" ]; then
+if [[ -n $3 ]]; then
   AWS_REGION="$3"
 fi
 
-if [ -z "$IMAGE_TAG" ] || [ -z "$AWS_ECR_REPO" ] || [ -z "$AWS_REGION" ]; then
+if [[ -z $IMAGE_TAG ]] || [[ -z $AWS_ECR_REPO ]] || [[ -z $AWS_REGION ]]; then
   echo 'bin/push - builds, tags, and pushes image to Amazon ECR'
   echo 'usage: bin/push [IMAGE_TAG] [AWS_ECR_REPO] [AWS_REGION]'
   echo

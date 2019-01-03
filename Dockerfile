@@ -5,10 +5,11 @@ LABEL author="Carsten Nielsen <heycarsten@gmail.com>"
 LABEL description="An image for a jump/utility server with Ruby, Python, Node.js, and other various utilities"
 
 ARG login_user="jmp"
+ARG login_group="sudo"
 ARG login_home="/home/jmp"
 ARG login_volume="/home/jmp"
 
-USER $login_user
+USER root
 
 # Copy credentials
 COPY \
@@ -21,21 +22,20 @@ COPY \
   config/.aws/credentials \
   $login_home/.aws/
 
-COPY config/.bash_profile $login_home/
+COPY config/.profile $login_home/.profile
 
-USER root
-
-# Update permissions
 RUN \
+  # Update permissions
   chmod 700 $login_home/.ssh && \
   chmod 644 $login_home/.ssh/authorized_keys && \
   chmod 644 $login_home/.ssh/config && \
   chmod 700 $login_home/.aws && \
   chmod 644 $login_home/.aws/config && \
   chmod 644 $login_home/.aws/credentials && \
-  chown -R "${login_user}:sudo" $login_home/
+  # Reown login user home directory
+  chown -R $login_user:$login_group $login_home/
 
-USER $login_user
+USER $login_user:$login_group
 
 RUN \
   # Install Ruby packages (via RubyGems)
@@ -51,9 +51,6 @@ RUN \
     ansible \
     awscli
 
-COPY       config/docker-entrypoint.sh /
-USER       root
-ENTRYPOINT ["sh", "/docker-entrypoint.sh"]
-EXPOSE     22
-VOLUME     $login_volume
-CMD        ["-e"]
+USER   root
+VOLUME $login_volume
+CMD    ["-d", "-e"]

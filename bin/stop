@@ -5,11 +5,11 @@ set -o allexport
 [[ -f .env ]] && source .env
 set +o allexport
 
-if [ -n "$1" ]; then
+if [[ -n $1 ]]; then
   CONTAINER_NAME="$1"
 fi
 
-if [ -z "$CONTAINER_NAME" ]; then
+if [[ -z $CONTAINER_NAME ]]; then
   echo 'bin/stop - stops and removes the container started by bin/rund'
   echo 'usage: bin/stop [CONTAINER_NAME]'
   echo
@@ -17,5 +17,5 @@ else
   echo "== Stopping container: $CONTAINER_NAME"
   docker stop "$CONTAINER_NAME"
   docker rm "$CONTAINER_NAME"
-  echo '-> Done.'
+  echo '-> Done'
 fi

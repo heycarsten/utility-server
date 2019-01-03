@@ -5,11 +5,11 @@ set -o allexport
 [[ -f .env ]] && source .env
 set +o allexport
 
-if [ -n "$1" ]; then
+if [[ -n $1 ]]; then
   AWS_REGION="$1"
 fi
 
-if [ -z "$AWS_REGION" ]; then
+if [[ -z $AWS_REGION ]]; then
   echo 'bin/auth - authenticate with Amazon ECR via awscli'
   echo 'usage: bin/auth [AWS_REGION]'
   echo

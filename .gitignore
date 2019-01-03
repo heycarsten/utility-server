@@ -1,5 +1,5 @@
 /config/.bashrc
-/config/.bash_profile
+/config/.profile
 /config/.gemrc
 /config/.npmrc
 /config/.sudo-passwd
