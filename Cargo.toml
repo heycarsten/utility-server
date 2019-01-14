@@ -1,15 +1,22 @@
 [package]
-name = "utility-server"
-readme = "README.md"
+name = "utlsrv"
+version = "0.1.0"
 keywords = ["docker", "ecs", "ecr", "aws", "ssh", "mosh"]
 license = "GPL-3.0"
-version = "0.1.0"
 authors = ["Carsten Nielsen <heycarsten@gmail.com>"]
-description = "A command-line tool for building and deploying a personal utility server to Amazon ECS"
+description = """
+A command-line tool for deploying a personal utility server to Amazon ECS
+"""
 exclude = []
+
+[lib]
+name = "utlsrv"
+path = "src/utlsrv/lib.rs"
 
 [[bin]]
 name = "utlsrv"
+test = false
+doc = false
 
 [dependencies]
 semver = "~0.7"

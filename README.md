@@ -81,3 +81,10 @@ utlsrv push
 
 Probably will happen with the above step, perhaps also should have a `destroy`
 command or something to shut it down. Soon :heart:
+
+## Notes
+
+* [Rust Book](https://doc.rust-lang.org/book/) - Lots of info here!!!
+* [Shiplift](https://github.com/softprops/shiplift) - Docker interface
+* [Clap](https://github.com/clap-rs/clap) - CLI framework
+* [Cargo](https://github.com/rust-lang/cargo) - Inspiration / learning for layout
