@@ -8,6 +8,7 @@ description = """
 A command-line tool for deploying a personal utility server to Amazon ECS
 """
 exclude = []
+edition = "2018"
 
 [lib]
 name = "utlsrv"
