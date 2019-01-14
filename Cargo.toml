@@ -1,11 +1,21 @@
 [package]
-name = "utlsrv"
+name = "utility-server"
+readme = "README.md"
+keywords = ["docker", "ecs", "ecr", "aws", "ssh", "mosh"]
+license = "GPL-3.0"
 version = "0.1.0"
 authors = ["Carsten Nielsen <heycarsten@gmail.com>"]
+description = "A command-line tool for building and deploying a personal utility server to Amazon ECS"
+exclude = []
+
+[[bin]]
+name = "utlsrv"
 
 [dependencies]
-clap = "~2.31.2"
-shiplift = "~0.4.0"
-rusoto_core = "~0.36.0"
-rusoto_ecs = "~0.36.0"
-rusoto_ecr = "~0.36.0"
+semver = "~0.7"
+clap = "~2.31"
+shiplift = "~0.4"
+rusoto_core = "~0.36"
+rusoto_ecs = "~0.36"
+rusoto_ecr = "~0.36"
+utlsrv = "0.1.0"
