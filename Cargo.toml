@@ -19,10 +19,10 @@ test = false
 doc = false
 
 [dependencies]
-semver = "~0.7"
-clap = "~2.31"
-handlebars = "~1.1"
-shiplift = "~0.4"
-rusoto_core = "~0.36"
-rusoto_ecs = "~0.36"
-rusoto_ecr = "~0.36"
+semver = "0.9.0"
+clap = "2.32.0"
+handlebars = "1.1.0"
+shiplift = "0.4.0"
+rusoto_core = "0.36.0"
+rusoto_ecs = "0.36.0"
+rusoto_ecr = "0.36.0"

@@ -88,3 +88,5 @@ command or something to shut it down. Soon :heart:
 * [Shiplift](https://github.com/softprops/shiplift) - Docker interface
 * [Clap](https://github.com/clap-rs/clap) - CLI framework
 * [Cargo](https://github.com/rust-lang/cargo) - Inspiration / learning for layout
+* [Handlebars](https://github.com/sunng87/handlebars-rust) - For templating
+* [Rusoto](https://github.com/rusoto/rusoto) - Get it? boto ➡️ rusoto: AWS SDK
