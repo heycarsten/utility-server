@@ -1,3 +1,4 @@
+# Olds
 /.ecr-auth
 /.env
 /config/.aws/config
@@ -13,3 +14,7 @@
 /config/.sudo-passwd
 /config/docker-entrypoint.sh
 /config/sshd_config
+
+# Rusty
+/target
+**/*.rs.bk
