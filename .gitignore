@@ -1,20 +1,3 @@
-# Olds
-/.ecr-auth
-/.env
-/config/.aws/config
-/config/.aws/credentials
-/config/.bashrc
-/config/.gemrc
-/config/.irbrc
-/config/.npmrc
-/config/.profile
-/config/.pryrc
-/config/.ssh/authorized_keys
-/config/.ssh/config
-/config/.sudo-passwd
-/config/docker-entrypoint.sh
-/config/sshd_config
-
-# Rusty
+.env
 /target
 **/*.rs.bk
