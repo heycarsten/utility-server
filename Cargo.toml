@@ -21,8 +21,8 @@ doc = false
 [dependencies]
 semver = "~0.7"
 clap = "~2.31"
+handlebars = "~1.1"
 shiplift = "~0.4"
 rusoto_core = "~0.36"
 rusoto_ecs = "~0.36"
 rusoto_ecr = "~0.36"
-utlsrv = "0.1.0"
